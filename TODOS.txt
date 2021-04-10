@@ -1,0 +1,13 @@
+- fetch rss feed and display it
+- add/delete sources
+- sorting/filtering
+
+- storing sources
+  - postgres database
+  - name, url (src of rss feed)
+
+- backend
+  - golang server
+
+- frontend
+  - svelte
