@@ -11,22 +11,13 @@
     
     export let source = "[no source]";
 
-    const feedItems = [
-        {
-            title: "hi",
-            link: "https://www.example.com",
-            source: "lobsters",
-            categories: ["test-1", "test-2", "test-3"],
-            comments: ""
-        },
-        {
-            title: "there",
-            link: "https://www.example.com",
-            source: "lobsters",
-            categories: ["test-1", "test-2", "test-3"],
-            comments: ""
-        }
-    ];
+    async function fetchFeed() {
+      let res = await fetch("http://localhost:8000/feed");
+      let data = await res.json();
+      return data["items"];
+    }
+
+    const promise = fetchFeed();
 </script>
 
 <div class="feed">
@@ -39,8 +30,12 @@
           <Button text="sort by" />
         </div>
     </AppBar>
-    {#each feedItems as item}
-        <FeedItem {...item} />
-    {/each}
+    {#await promise}
+      loading...
+    {:then feedItems}
+        {#each feedItems as item}
+            <FeedItem {...item} />
+        {/each}
+    {/await}
 </div>
 
