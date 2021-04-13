@@ -9,15 +9,8 @@
     import FeedItem from "./FeedItem.svelte";
     import Button from "./Button.svelte";
     
+    export let fetchFeed;
     export let source = "[no source]";
-
-    async function fetchFeed() {
-      let res = await fetch("http://localhost:8000/feed");
-      let data = await res.json();
-      return data["items"];
-    }
-
-    const promise = fetchFeed();
 </script>
 
 <div class="feed">
@@ -30,11 +23,16 @@
           <Button text="sort by" />
         </div>
     </AppBar>
-    {#await promise}
+    {#await fetchFeed}
       loading...
     {:then feedItems}
-        {#each feedItems as item}
-            <FeedItem {...item} />
+        {#each feedItems as { 
+          title = "[no title]", 
+          link = "/", 
+          published = "[no date]", 
+          categories = [] 
+        }}
+            <FeedItem {title} {link} {published} {categories} />
         {/each}
     {/await}
 </div>

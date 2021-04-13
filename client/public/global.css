@@ -6,6 +6,7 @@
     --font-size-s: 12px; 
     
     --color-accent: #fffcd7;
+    --color-accent-dark: #d5d458;
     --color-danger: #ffdfdf;
 }
 
@@ -67,6 +68,11 @@ button:focus {
 	border-color: #666;
 }
 
+button:disabled {
+    background: #ccc;
+    opacity: 0.5;
+}
+
 .font-size-xl {
     font-size: 24px;
 }
@@ -93,4 +99,17 @@ button:focus {
 
 .highlight {
     background: var(--color-accent);
+}
+
+.highlight:disabled {
+    background: #d5d458;
+    opacity: 0.7;
+}
+
+.outline {
+    outline: 1px solid var(--color-accent-dark);
+}
+
+.pointer {
+    cursor: pointer;
 }

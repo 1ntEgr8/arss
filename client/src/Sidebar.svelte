@@ -8,6 +8,14 @@
         padding: 0px;
         list-style: none;
     }
+    
+    li:hover {
+        cursor: pointer;
+    }
+
+    li:hover:not(.highlight) {
+        background: #f2f2f2;
+    }
 </style>
 
 <script>
@@ -16,27 +24,15 @@
     import Source from "./Source.svelte";
     import EditSource from "./forms/EditSource.svelte";
 
-    let sources = [
-      { id: 1, name: "lobsters", url: "https://lobste.rs"},
-      { id: 2, name: "shtetl-optimized", url: "https://www.scottaaronson.com/blog/"}
-    ];
+    export let selected = -1;
+    export let sources = [];
+    export let handleSourceChange;
+    export let handleAddSource;
+    export let handleDelSource;
+    export let handleEditSource;
+
     let adding = false;
-    
-    function addSource({name, url}) {
-        alert("added");
-    }
-
-    function editSource(sourceId, {name, url}) {
-        // TODO insert api call
-        const idx = sources.findIndex(({id}) => sourceId === id)
-        sources[idx].name = name;
-        sources[idx].url = url;
-    }
-
-    function deleteSource(sourceId) {
-        // TODO insert api call
-        sources = sources.filter(({id}) => id !== sourceId);
-    }
+   
 </script>
 
 <div class="sidebar">
@@ -46,28 +42,33 @@
             <button 
                 disabled={adding} 
                 class={`${adding ? "highlight" : ""}`}
-                on:click={() => {console.log("what");adding = true}}
+                on:click={() => adding = true}
             >add source</button>
         </div>
     </AppBar>
     
     {#if adding}
         <EditSource
-            handleSubmit={(name, url) => addSource({name, url})}
+            handleSubmit={async (name, url) => {
+                const ok = await handleAddSource(name, url);
+                console.log(ok); 
+                adding = false;
+            }}
             handleCancel={() => adding = false }
         />
     {/if}
 
     <ul>
-        <li>
-            <Source id="none" name="all" url="/" noedit/>
-        </li>
-        {#each sources as source (source.id)}
-        <li>
+        {#each sources as source, i (source.id)}
+        <li
+            class={i === selected ? "highlight outline" : ""}
+        >
             <Source 
+                handleClick={() => handleSourceChange(i)}
+                selected={i === selected}
                 {...source} 
-                {deleteSource} 
-                {editSource} 
+                delSource={handleDelSource} 
+                editSource={handleEditSource} 
             />
         </li>
         {/each}

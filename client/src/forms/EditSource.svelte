@@ -1,15 +1,16 @@
 <style>
     .form {
+        width: 100%;
         margin: var(--spacing-small) 0px;
         display: grid;
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(4,1fr);
         grid-gap: var(--spacing-small);
     }
     
     .btn-container {
         display: grid;
         grid-template-columns: repeat(2,1fr);
-        grid-column: 1/3;
+        grid-column: 1/5;
         grid-gap: var(--spacing-small);
     }
 
@@ -23,6 +24,14 @@
 
     #cancel {
         background: var(--color-danger);
+    }
+
+    label {
+        grid-column: 1/2; 
+    }
+
+    input {
+        grid-column: 2/5;
     }
 </style>
 
