@@ -32,6 +32,7 @@ func main() {
 	r.HandleFunc("/sources/del/{id}", RemoveSource).Methods("POST")
 	r.HandleFunc("/sources/edit/{id}", EditSource).Methods("POST")
 	r.HandleFunc("/feed/{id}", GetFeed)
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("client/public/")))
 
 	log.Printf("Listening on port 8000")
 	log.Fatal(http.ListenAndServe(":8000", r))

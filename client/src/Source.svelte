@@ -24,7 +24,6 @@
 
     export let id;
     export let name = "[no name]";
-    export let url = "https://example.com";
     export let noedit = false;
     export let editSource;
     export let delSource;
@@ -39,9 +38,7 @@
     class="source"
     on:click={handleClick}
     >
-    <a href={url}>
-        {name}
-    </a>
+    {name}
     {#if !noedit && selected}
         <div>
             <button 
