@@ -53,15 +53,20 @@
         const res = await fetch(`http://localhost:8000/sources/del/${sourceId}`, {
             method: "POST"
         });
+
+        console.log("deleted ", sources);
     }
 
     async function addSource(name, url) {
         const res = await fetch("http://localhost:8000/sources/add", {
             method: "POST",
-            body: JSON.stringify({id: 0, name, url})
+            body: JSON.stringify({name, url})
         });
+        const source = await res.json(); 
         
-        sources = [...sources, { id: 7, name, url}];
+        console.log(source);
+
+        sources = [...sources, source];
         selected = sources.length - 1;
 
         return res.ok;
