@@ -10,6 +10,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type Error struct {
+	Msg string `json:"msg"`
+}
+
 type SourceHandler struct {
 	db *gorm.DB
 }
@@ -21,29 +25,34 @@ func NewSourceHandler(db *gorm.DB) *SourceHandler {
 }
 
 func (s *SourceHandler) GetSources(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var sources []Source
 	s.db.Find(&sources)
 
 	body, err := json.Marshal(sources)
 	if err != nil {
-		log.Fatal("failed to marshal sources into json")
+		msg := "unable to grab sources"
+		log.Println(msg)
+		json.NewEncoder(w).Encode(Error{msg})
+	} else {
+		w.Write(body)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(body)
 }
 
 func (s *SourceHandler) AddSource(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var source Source
 	err := json.NewDecoder(r.Body).Decode(&source)
 	if err != nil {
-		log.Fatal("bad request body!")
+		msg := "failed to decode request body"
+		log.Println(msg)
+		json.NewEncoder(w).Encode(Error{msg})
+		return
 	}
 	s.db.Create(&source)
-
 	body, err := json.Marshal(source)
-
-	w.Header().Set("Content-Type", "application/json")
 	w.Write(body)
 }
 
@@ -53,6 +62,8 @@ func (s *SourceHandler) RemoveSource(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *SourceHandler) EditSource(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	var source Source
 
 	nameUrl := struct {
@@ -64,7 +75,10 @@ func (s *SourceHandler) EditSource(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&nameUrl)
 	if err != nil {
-		log.Fatal("bad request body")
+		msg := "failed to decode request body"
+		log.Println(msg)
+		json.NewEncoder(w).Encode(Error{msg})
+		return
 	}
 
 	source.Name = nameUrl.Name
@@ -74,22 +88,28 @@ func (s *SourceHandler) EditSource(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *SourceHandler) GetFeed(w http.ResponseWriter, r *http.Request) {
-	var source Source
+	w.Header().Set("Content-Type", "application/json")
 
+	var source Source
 	vars := mux.Vars(r)
 	s.db.First(&source, vars["id"])
 
 	fp := gofeed.NewParser()
 	feed, err := fp.ParseURL(source.Url)
 	if err != nil {
-		log.Fatal("failed to parse rss feed")
+		msg := "failed to fetch feed; perhaps the URL is invalid"
+		log.Println(msg)
+		json.NewEncoder(w).Encode(Error{msg})
+		return
 	}
 
 	body, err := json.Marshal(feed)
 	if err != nil {
-		log.Fatal("failed to marshall feed into json")
+		msg := "failed to build feed"
+		log.Println(msg)
+		json.NewEncoder(w).Encode(Error{msg})
+		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	w.Write(body)
 }

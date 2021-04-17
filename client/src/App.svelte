@@ -24,9 +24,9 @@
     }
 
     async function fetchFeed(id) {
-      const res = await fetch(`http://localhost:8000/feed/${id}`);
-      const data = await res.json();
-      return data["items"];
+        const res = await fetch(`http://localhost:8000/feed/${id}`);
+        const data = await res.json();
+        return data["items"];
     }
 
     function changeSource(id) {
@@ -53,8 +53,6 @@
         const res = await fetch(`http://localhost:8000/sources/del/${sourceId}`, {
             method: "POST"
         });
-
-        console.log("deleted ", sources);
     }
 
     async function addSource(name, url) {
@@ -64,8 +62,6 @@
         });
         const source = await res.json(); 
         
-        console.log(source);
-
         sources = [...sources, source];
         selected = sources.length - 1;
 
