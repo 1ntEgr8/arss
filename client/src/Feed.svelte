@@ -34,6 +34,8 @@
         }}
             <FeedItem {title} {link} {published} {categories} />
         {/each}
+    {:catch}
+        Failed to fetch feed! Make sure the url is pointing to an RSS/Atom feed
     {/await}
 </div>
 

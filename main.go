@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
-	_ "strconv"
+	"os/exec"
+	"runtime"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	_ "github.com/mmcdole/gofeed"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -45,6 +45,26 @@ func Serve() {
 	r.HandleFunc("/feed/{id}", s.GetFeed)
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("client/public/")))
 
-	log.Printf("Listening on port 8000")
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Printf("Listening on port 8080")
+	go open("http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
+}
+
+// https://stackoverflow.com/questions/39320371/how-start-web-server-to-open-page-in-browser-in-golang
+// open opens the specified URL in the default browser of the user.
+func open(url string) error {
+	var cmd string
+	var args []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = "cmd"
+		args = []string{"/c", "start"}
+	case "darwin":
+		cmd = "open"
+	default: // "linux", "freebsd", "openbsd", "netbsd"
+		cmd = "xdg-open"
+	}
+	args = append(args, url)
+	return exec.Command(cmd, args...).Start()
 }

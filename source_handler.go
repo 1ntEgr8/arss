@@ -24,19 +24,28 @@ func NewSourceHandler(db *gorm.DB) *SourceHandler {
 	}
 }
 
-func (s *SourceHandler) GetSources(w http.ResponseWriter, r *http.Request) {
+func Json(v interface{}, w http.ResponseWriter) error {
+	err := json.NewEncoder(w).Encode(v)
+	if err != nil {
+		return err
+	}
 	w.Header().Set("Content-Type", "application/json")
+	return nil
+}
 
+func InternalServerError(msg string, w http.ResponseWriter) {
+	log.Println(msg)
+	w.WriteHeader(http.StatusInternalServerError)
+	Json(Error{msg}, w)
+}
+
+func (s *SourceHandler) GetSources(w http.ResponseWriter, r *http.Request) {
 	var sources []Source
 	s.db.Find(&sources)
 
-	body, err := json.Marshal(sources)
+	err := Json(sources, w)
 	if err != nil {
-		msg := "unable to grab sources"
-		log.Println(msg)
-		json.NewEncoder(w).Encode(Error{msg})
-	} else {
-		w.Write(body)
+		InternalServerError("failed to jsonify sources", w)
 	}
 }
 
@@ -46,14 +55,11 @@ func (s *SourceHandler) AddSource(w http.ResponseWriter, r *http.Request) {
 	var source Source
 	err := json.NewDecoder(r.Body).Decode(&source)
 	if err != nil {
-		msg := "failed to decode request body"
-		log.Println(msg)
-		json.NewEncoder(w).Encode(Error{msg})
+		InternalServerError("failed to decode body", w)
 		return
 	}
 	s.db.Create(&source)
-	body, err := json.Marshal(source)
-	w.Write(body)
+	Json(source, w)
 }
 
 func (s *SourceHandler) RemoveSource(w http.ResponseWriter, r *http.Request) {
@@ -75,9 +81,7 @@ func (s *SourceHandler) EditSource(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&nameUrl)
 	if err != nil {
-		msg := "failed to decode request body"
-		log.Println(msg)
-		json.NewEncoder(w).Encode(Error{msg})
+		InternalServerError("failed to decode request body", w)
 		return
 	}
 
@@ -97,19 +101,13 @@ func (s *SourceHandler) GetFeed(w http.ResponseWriter, r *http.Request) {
 	fp := gofeed.NewParser()
 	feed, err := fp.ParseURL(source.Url)
 	if err != nil {
-		msg := "failed to fetch feed; perhaps the URL is invalid"
-		log.Println(msg)
-		json.NewEncoder(w).Encode(Error{msg})
+		InternalServerError("failed to fetch feed; perhaps the URL is invalid", w)
 		return
 	}
 
-	body, err := json.Marshal(feed)
+	err = Json(feed, w)
 	if err != nil {
-		msg := "failed to build feed"
-		log.Println(msg)
-		json.NewEncoder(w).Encode(Error{msg})
+		InternalServerError("failed to make feed", w)
 		return
 	}
-
-	w.Write(body)
 }

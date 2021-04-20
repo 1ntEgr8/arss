@@ -11,22 +11,30 @@
     import Header from "./Header.svelte";
     import Sidebar from "./Sidebar.svelte";
     import Feed from "./Feed.svelte";
+    
+    const PORT = 8080;
 
     let sources = [];
     let selected = -1;
     
     async function fetchSources() {
-        const res = await fetch("http://localhost:8000/sources") 
+        const res = await fetch(`http://localhost:${PORT}/sources`) 
         const data = await res.json();
         sources = data;
-        if (data?.length > 0) selected = 0;
-        return data
+        if (data?.length > 0) {
+            selected = 0;
+        }
+        return data;
     }
 
     async function fetchFeed(id) {
-        const res = await fetch(`http://localhost:8000/feed/${id}`);
+        const res = await fetch(`http://localhost:${PORT}/feed/${id}`);
         const data = await res.json();
-        return data["items"];
+        if (res.ok) {
+            return data["items"];
+        } else {
+            throw new Error(data["msg"]);
+        }
     }
 
     function changeSource(id) {
@@ -38,10 +46,14 @@
         sources[idx].name = name;
         sources[idx].url = url;
         
-        const res = await fetch(`http://localhost:8000/sources/edit/${sourceId}`, {
+        const res = await fetch(`http://localhost:${PORT}/sources/edit/${sourceId}`, {
             method: "POST",
             body: JSON.stringify({ name, url })
         });
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data["msg"]);
+        }
     }
 
     async function delSource(sourceId) {
@@ -50,13 +62,18 @@
             selected = selected - 1;
         }
 
-        const res = await fetch(`http://localhost:8000/sources/del/${sourceId}`, {
+        const res = await fetch(`http://localhost:${PORT}/sources/del/${sourceId}`, {
             method: "POST"
         });
+
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data["msg"]);
+        }
     }
 
     async function addSource(name, url) {
-        const res = await fetch("http://localhost:8000/sources/add", {
+        const res = await fetch(`http://localhost:${PORT}/sources/add`, {
             method: "POST",
             body: JSON.stringify({name, url})
         });
@@ -65,7 +82,10 @@
         sources = [...sources, source];
         selected = sources.length - 1;
 
-        return res.ok;
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data["msg"]);
+        }
     }
 </script>
 
@@ -88,5 +108,7 @@
             fetchFeed={fetchFeed(sources[selected].id)}
         />
         {/if}
+  {:catch}
+      Failed to load sources! Check server logs for more info
   {/await}
 </main>
