@@ -19,8 +19,8 @@
 </style>
 
 <script>
-    import DeleteSource from "./forms/DeleteSource.svelte";
-    import EditSource from "./forms/EditSource.svelte";
+    import DeleteSource from "../forms/DeleteSource.svelte";
+    import EditSource from "../forms/EditSource.svelte";
 
     export let id;
     export let name = "[no name]";

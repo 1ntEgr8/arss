@@ -22,7 +22,7 @@
     import Button from "./Button.svelte";
     import AppBar from "./AppBar.svelte";
     import Source from "./Source.svelte";
-    import EditSource from "./forms/EditSource.svelte";
+    import EditSource from "../forms/EditSource.svelte";
 
     export let selected = -1;
     export let sources = [];

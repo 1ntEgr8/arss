@@ -8,9 +8,9 @@
 </style>
 
 <script>
-    import Header from "./Header.svelte";
-    import Sidebar from "./Sidebar.svelte";
-    import Feed from "./Feed.svelte";
+    import Header from "./components/Header.svelte";
+    import Sidebar from "./components/Sidebar.svelte";
+    import Feed from "./components/Feed.svelte";
     
     const PORT = 8080;
 
