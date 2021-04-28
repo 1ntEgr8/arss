@@ -36,7 +36,7 @@
     class="form font-size-m"
     on:submit|preventDefault={handleYes}
 >
-    <label id="confirm">are you sure?</label>
+    <span id="confirm">are you sure?</span>
     <div class="btn-container">
         <button type="submit"> yes </button>
         <button id="cancel" on:click={handleNo} type="button"> no </button>

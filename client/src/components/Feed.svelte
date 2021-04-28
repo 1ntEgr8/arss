@@ -19,9 +19,6 @@
           <span class="font-size-l">feed</span>
           <span>/{source}</span>
         </div>
-        <div class="font-size-s" slot="options">
-          <Button text="sort by" />
-        </div>
     </AppBar>
     {#await fetchFeed}
       loading...

@@ -1,9 +1,28 @@
 # arss
 An rss reader
 
+## Motivation
+
+I wanted a very minimal RSS reader that **wasn't** feature packed, but could be extended. Something super simple.
+
 ## Installation
 
-TODO
+### From source
+
+- Clone the repo
+```
+git clone https://github.com/1ntEgr8/arss
+```
+
+- Install by running
+```
+make install path/to/installation/directory
+```
+
+Example:
+```
+make install /usr/local/bin
+```
 
 ## Usage
 
