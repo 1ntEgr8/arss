@@ -14,14 +14,14 @@ I wanted a very minimal RSS reader that **wasn't** feature packed, but could be 
 git clone https://github.com/1ntEgr8/arss
 ```
 
-- Install by running
+- Build the client and server
 ```
-make install path/to/installation/directory
+npm --prefix client run build && go build arss
 ```
 
-Example:
+- Run the program
 ```
-make install /usr/local/bin
+./arss
 ```
 
 ## Usage

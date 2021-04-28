@@ -12,13 +12,11 @@
     import Sidebar from "./components/Sidebar.svelte";
     import Feed from "./components/Feed.svelte";
     
-    const PORT = 8080;
-
     let sources = [];
     let selected = -1;
     
     async function fetchSources() {
-        const res = await fetch(`http://localhost:${PORT}/sources`) 
+        const res = await fetch(`/sources`) 
         const data = await res.json();
         sources = data;
         if (data?.length > 0) {
@@ -28,7 +26,7 @@
     }
 
     async function fetchFeed(id) {
-        const res = await fetch(`http://localhost:${PORT}/feed/${id}`);
+        const res = await fetch(`/feed/${id}`);
         const data = await res.json();
         if (res.ok) {
             return data["items"];
@@ -46,7 +44,7 @@
         sources[idx].name = name;
         sources[idx].url = url;
         
-        const res = await fetch(`http://localhost:${PORT}/sources/edit/${sourceId}`, {
+        const res = await fetch(`/sources/edit/${sourceId}`, {
             method: "POST",
             body: JSON.stringify({ name, url })
         });
@@ -62,7 +60,7 @@
             selected = selected - 1;
         }
 
-        const res = await fetch(`http://localhost:${PORT}/sources/del/${sourceId}`, {
+        const res = await fetch(`/sources/del/${sourceId}`, {
             method: "POST"
         });
 
@@ -73,7 +71,7 @@
     }
 
     async function addSource(name, url) {
-        const res = await fetch(`http://localhost:${PORT}/sources/add`, {
+        const res = await fetch(`/sources/add`, {
             method: "POST",
             body: JSON.stringify({name, url})
         });
