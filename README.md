@@ -28,7 +28,7 @@ npm --prefix client run build && go build arss
 
 Run `arss`. You should see the rss reader automatically open in your default browser.
 
-`arss` comes with a default web client. However, you can also write your own. See [Writing your own client]() for more information.
+`arss` comes with a default web client. However, you can also write your own. See [Writing your own client](#writing-your-own-client) for more information.
 
 To tell `arss` to use your client instead of the default, use the `client-path` flag
 ```bash
@@ -37,7 +37,7 @@ arss --client-path /path/to/client
 
 ## Developing
 
-The client is written in [Svelte](https://svelte.dev/) and the server is in [Go](https://golang.org/)
+The client is written in [Svelte](https://svelte.dev/). The server is in [Go](https://golang.org/)
 
 - Run the client
 ```bash
@@ -56,4 +56,4 @@ By default, the server uses port 8080. You can change this with the `--port` fla
 
 ## Writing your own client
 
-The `arss` server exposes a REST api that you can use to populate your client. Take a look at `main.go` for a list of routes.
+The `arss` server exposes a REST api that you can use to populate your client. Take a look at [main.go](./main.go) for a list of routes.
