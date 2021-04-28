@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 
@@ -18,9 +19,18 @@ func main() {
 	headless := flag.Bool("headless", false, "run server in headless mode")
 	port := flag.Int("port", 8080, "which port to run server on")
 	client := flag.String("client-path", "client/public", "path to client")
+	dbPath := flag.Bool("db-path", false, "prints path to sources db")
 	flag.Parse()
 
-	Serve(*client, *port, *headless)
+	if *dbPath {
+		pwd, err := os.Getwd()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf(fmt.Sprintf("%s/sources.db", pwd))
+	} else {
+		Serve(*client, *port, *headless)
+	}
 }
 
 func ConnectDB() *gorm.DB {
