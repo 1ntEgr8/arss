@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os/exec"
@@ -12,14 +14,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type Source struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
-	Url  string `json:"url"`
-}
-
 func main() {
-	Serve()
+	headless := flag.Bool("headless", false, "run server in headless mode")
+	port := flag.Int("port", 8080, "which port to run server on")
+	client := flag.String("client-path", "client/public", "path to client")
+	flag.Parse()
+
+	Serve(*client, *port, *headless)
 }
 
 func ConnectDB() *gorm.DB {
@@ -31,7 +32,7 @@ func ConnectDB() *gorm.DB {
 	return db
 }
 
-func Serve() {
+func Serve(client string, port int, headless bool) {
 	db := ConnectDB()
 	s := NewSourceHandler(db)
 
@@ -43,11 +44,15 @@ func Serve() {
 	r.HandleFunc("/sources/del/{id}", s.RemoveSource).Methods("POST")
 	r.HandleFunc("/sources/edit/{id}", s.EditSource).Methods("POST")
 	r.HandleFunc("/feed/{id}", s.GetFeed)
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("client/public/")))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(client)))
 
-	log.Printf("Listening on port 8080")
-	go open("http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	if !headless {
+		go open(fmt.Sprintf("http://localhost:%d", port))
+	} else {
+		log.Printf("Running in headless mode")
+	}
+	log.Printf(fmt.Sprintf("Listening on port %d", port))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }
 
 // https://stackoverflow.com/questions/39320371/how-start-web-server-to-open-page-in-browser-in-golang
