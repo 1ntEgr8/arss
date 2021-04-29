@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 
 	"github.com/gorilla/handlers"
@@ -16,25 +17,29 @@ import (
 )
 
 func main() {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal("Could not determine user's home directory")
+	}
+
+	defaultClientPath := filepath.Join(homeDir, ".arss", "clients", "default")
+
 	headless := flag.Bool("headless", false, "run server in headless mode")
 	port := flag.Int("port", 8080, "which port to run server on")
-	client := flag.String("client-path", "client/public", "path to client")
-	dbPath := flag.Bool("db-path", false, "prints path to sources db")
+	clientPath := flag.String("client", defaultClientPath, "path to client")
+	printConfigPath := flag.Bool("config-path", false, "prints path to default configuration files")
 	flag.Parse()
 
-	if *dbPath {
-		pwd, err := os.Getwd()
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf(fmt.Sprintf("%s/sources.db", pwd))
+	if *printConfigPath {
+		configPath := filepath.Join(homeDir, ".arss")
+		fmt.Printf(configPath)
 	} else {
-		Serve(*client, *port, *headless)
+		Serve(*clientPath, *port, *headless)
 	}
 }
 
-func ConnectDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("sources.db"), &gorm.Config{})
+func ConnectDB(path string) *gorm.DB {
+	db, err := gorm.Open(sqlite.Open(path), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
@@ -42,8 +47,16 @@ func ConnectDB() *gorm.DB {
 	return db
 }
 
-func Serve(client string, port int, headless bool) {
-	db := ConnectDB()
+func Serve(clientPath string, port int, headless bool) {
+	clientExists, err := exists(clientPath)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Could not check if client at %s exists", clientPath))
+	}
+	if !clientExists {
+		log.Fatal(fmt.Sprintf("%s does not exist", clientPath))
+	}
+
+	db := ConnectDB(filepath.Join(clientPath, "sources.db"))
 	s := NewSourceHandler(db)
 
 	r := mux.NewRouter()
@@ -54,7 +67,7 @@ func Serve(client string, port int, headless bool) {
 	r.HandleFunc("/sources/del/{id}", s.RemoveSource).Methods("POST")
 	r.HandleFunc("/sources/edit/{id}", s.EditSource).Methods("POST")
 	r.HandleFunc("/feed/{id}", s.GetFeed)
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir(client)))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(clientPath)))
 
 	if !headless {
 		go open(fmt.Sprintf("http://localhost:%d", port))
@@ -64,6 +77,8 @@ func Serve(client string, port int, headless bool) {
 	log.Printf(fmt.Sprintf("Listening on port %d", port))
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }
+
+// helpers
 
 // https://stackoverflow.com/questions/39320371/how-start-web-server-to-open-page-in-browser-in-golang
 // open opens the specified URL in the default browser of the user.
@@ -82,4 +97,16 @@ func open(url string) error {
 	}
 	args = append(args, url)
 	return exec.Command(cmd, args...).Start()
+}
+
+// https://stackoverflow.com/questions/10510691/how-to-check-whether-a-file-or-directory-exists
+func exists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
