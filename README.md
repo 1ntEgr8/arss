@@ -1,5 +1,5 @@
 # arss
-An rss reader
+An rss reader that doesn't try to do too much
 
 ## Motivation
 
@@ -57,3 +57,11 @@ By default, the server uses port 8080. You can change this with the `--port` fla
 ## Writing your own client
 
 The `arss` server exposes a REST api that you can use to populate your client. Take a look at [main.go](./main.go) for a list of routes.
+
+## Bugs/New features
+
+Feel free to [file an issue](https://github.com/1ntEgr8/arss/issues/new) if you spot a bug or want to make a feature request
+
+## Contributing
+
+PRs are welcome :) See [Developing](#Developing) for details on how to set up a dev environment.
