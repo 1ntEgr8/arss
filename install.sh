@@ -64,8 +64,8 @@ function build_server ()
 function install_client () 
 {
     info "installing client" &&
-    mkdir -p $DEFAULT_CLIENT_DIR &&
-    cp -R client/public/* $DEFAULT_CLIENT_DIR &&
+    mkdir -p "$DEFAULT_CLIENT_DIR" &&
+    cp -R client/public/* "$DEFAULT_CLIENT_DIR" &&
     info "installed client at $DEFAULT_CLIENT_DIR" &&
     success
 }
@@ -73,7 +73,7 @@ function install_client ()
 function install_server () 
 {
     info "installing server" &&
-    mv ./arss $1/arss &&
+    mv ./arss "$1/arss" &&
     info "installed server at $1" &&
     success
 }
@@ -86,17 +86,17 @@ function build ()
 
 function install () 
 {
-    if [ $only_client = true ]; then
+    if [ "$only_client" = true ]; then
         install_client 
     fi
 
-    if [ $only_server = true ]; then
-        install_server $server_path
+    if [ "$only_server" = true ]; then
+        install_server "$server_path"
     fi
     
-    if [ $only_client = false ] && [ $only_server = false ]; then
+    if [ "$only_client" = false ] && [ "$only_server" = false ]; then
         install_client &&
-        install_server $server_path
+        install_server "$server_path"
     fi
 }
 
@@ -105,7 +105,7 @@ function parse_args ()
     only_client=false
     only_server=false
 
-    for arg in $@; do
+    for arg in "$@"; do
         case $arg in
             -p|--path)
             server_path=$2
@@ -127,7 +127,7 @@ function parse_args ()
         esac
     done
 
-    build && install $@ || error_exit "error occurred"
+    (build && install "$@") || error_exit "error occurred"
 }
 
-parse_args $@
+parse_args "$@"
