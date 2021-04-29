@@ -5,13 +5,45 @@ DEFAULT_CLIENT_DIR="$CONFIG_DIR/clients/default"
 
 function info ()
 {
-    echo "info: $1"
+    echo "[info]: $1"
 }
 
 function success ()
 {
     echo "done!"
     echo ""
+}
+
+function error ()
+{
+    echo "[error]: $1"
+}
+
+function error_exit ()
+{
+    echo ""
+    error "INSTALLATION FAILED"
+    error "see the log above for information on which step failed"
+    echo "For usage details, type ./install.sh --help"
+    exit 1
+}
+
+function help_text ()
+{
+    echo "install.sh - Installation script for arss"
+    echo ""
+    echo "Usage:"
+    echo "  ./install.sh [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  -p, --path <path/to/installation/directory>"
+    echo "      Which directory to install arss in?"
+    echo "  -c, --only-client"
+    echo "      Only install client"
+    echo "  -s, --only-server"
+    echo "      Only install server"
+    echo "  -h, --help"
+    echo "      Prints help information"
 }
 
 function build_client () 
@@ -54,6 +86,22 @@ function build ()
 
 function install () 
 {
+    if [ $only_client = true ]; then
+        install_client 
+    fi
+
+    if [ $only_server = true ]; then
+        install_server $server_path
+    fi
+    
+    if [ $only_client = false ] && [ $only_server = false ]; then
+        install_client &&
+        install_server $server_path
+    fi
+}
+
+function parse_args ()
+{
     only_client=false
     only_server=false
 
@@ -72,21 +120,14 @@ function install ()
             only_server=true
             shift
             ;;
+            -h|--help)
+            help_text
+            exit 0
+            ;;
         esac
     done
-    
-    if [ $only_client = true ]; then
-        install_client 
-    fi
 
-    if [ $only_server = true ]; then
-        install_server $server_path
-    fi
-    
-    if [ $only_client = false ] && [ $only_server = false ]; then
-        install_client &&
-        install_server $server_path
-    fi
+    build && install $@ || error_exit "error occurred"
 }
 
-build && install $@
+parse_args $@
