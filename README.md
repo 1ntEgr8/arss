@@ -14,14 +14,10 @@ I wanted a very minimal RSS reader that **wasn't** feature packed, but could be 
 git clone https://github.com/1ntEgr8/arss
 ```
 
-- Build the client and server
+- Run the install script. You will need to specify the directory in which you want the binary to be installed
 ```
-npm --prefix client run build && go build arss
-```
-
-- Run the program
-```
-./arss
+chmod +x ./install.sh
+./install.sh --path <path/to/installation/directory>
 ```
 
 ## Usage
