@@ -17,7 +17,7 @@ git clone https://github.com/1ntEgr8/arss
 - Run the install script. You will need to specify the directory in which you want the binary to be installed
 ```
 chmod +x ./install.sh
-./install.sh --path <path/to/installation/directory>
+./install.sh --path path/to/installation/directory
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ Run `arss`. You should see the rss reader automatically open in your default bro
 
 To tell `arss` to use your client instead of the default, use the `client-path` flag
 ```bash
-arss --client-path /path/to/client
+arss --client /path/to/client
 ```
 
 ## Developing
