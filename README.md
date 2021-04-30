@@ -1,6 +1,13 @@
 # arss
 An rss reader that doesn't try to do too much
 
+## Demo
+
+
+https://user-images.githubusercontent.com/40111357/116642642-59d28480-a93d-11eb-96d7-23bd97e7209e.mp4
+
+
+
 ## Motivation
 
 I wanted a very minimal RSS reader that **wasn't** feature packed, but could be extended. Something super simple.
