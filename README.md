@@ -26,7 +26,7 @@ Run `arss`. You should see the rss reader automatically open in your default bro
 
 `arss` comes with a default web client. However, you can also write your own. See [Writing your own client](#writing-your-own-client) for more information.
 
-To tell `arss` to use your client instead of the default, use the `client-path` flag
+To tell `arss` to use your client instead of the default, use the `client` flag
 ```bash
 arss --client /path/to/client
 ```
