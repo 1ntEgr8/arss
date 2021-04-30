@@ -10,12 +10,12 @@ I wanted a very minimal RSS reader that **wasn't** feature packed, but could be 
 ### From source
 
 - Clone the repo
-```
+```bash
 git clone https://github.com/1ntEgr8/arss
 ```
 
 - Run the install script. You will need to specify the directory in which you want the binary to be installed
-```
+```bash
 chmod +x ./install.sh
 ./install.sh --path path/to/installation/directory
 ```
@@ -41,7 +41,7 @@ cd client && npm run dev
 ```
 - Run the server
 ```bash
-go run arss
+go run arss --client client/public
 ```
 
 You should see the client open up in the browser. 
