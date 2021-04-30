@@ -7,6 +7,12 @@ I wanted a very minimal RSS reader that **wasn't** feature packed, but could be 
 
 ## Installation
 
+### macOS
+Install via Homebrew
+```bash
+brew install 1ntEgr8/tap/arss-reader
+```
+
 ### From source
 
 - Clone the repo
