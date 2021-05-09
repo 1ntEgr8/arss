@@ -38,8 +38,8 @@
 <script>
     export let handleSubmit;
     export let handleCancel;
-    let name;
-    let url;
+    export let name = "";
+    export let url = "";
 </script>
 
 <form 
