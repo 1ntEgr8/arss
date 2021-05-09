@@ -8,8 +8,9 @@
     }
 
     .category {
-        background: var(--color-accent);
-        border: 1px solid var(--color-accent-dark);
+        background: var(--accent-color-light);
+        color: var(--text-color-dark);
+        border: 1px solid var(--accent-color-dark);
         border-radius: 2px;
         padding: 0px 0.4em 1px 0.4em;
         margin: 0px 2px;

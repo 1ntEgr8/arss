@@ -2,18 +2,18 @@
     --spacing-big: 24px; 
     --spacing: 12px;
     --spacing-small: 6px;
-
     --font-size-s: 12px; 
-    
-    --color-accent: #fffcd7;
-    --color-accent-dark: #d5d458;
-    --color-danger: #ffdfdf;
+    --text-color-dark: #333;
+    --text-color-light: #e4e4e4;
 }
 
 html, body {
 	position: relative;
 	width: 100%;
 	height: 100%;
+    
+    color: var(--text-color);
+    background: var(--bg-color);
 }
 
 * {
@@ -21,14 +21,13 @@ html, body {
 }
 
 body {
-	color: #333;
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
 }
 
 a {
-	color: rgb(0,100,200);
+	color: var(--anchor-color);
 	text-decoration: none;
 }
 
@@ -37,7 +36,7 @@ a:hover {
 }
 
 a:visited {
-	color: rgb(147 147 147);
+	color: var(--anchor-color-visited);
 }
 
 label {
@@ -98,7 +97,8 @@ button:disabled {
 }
 
 .highlight {
-    background: var(--color-accent);
+    background: var(--accent-color-light);
+    color: var(--text-color-dark);
 }
 
 .highlight:disabled {
@@ -107,10 +107,35 @@ button:disabled {
 }
 
 .outline {
-    outline: 1px solid var(--color-accent-dark);
+    outline: 1px solid var(--accent-color-dark);
 }
 
 .pointer {
     cursor: pointer;
 }
 
+/* Light theme */
+@media (prefers-color-scheme: light) {
+    :root {
+        --accent-color-light: #fffcd7;
+        --accent-color-dark: #d5d458;
+        --anchor-color: rgb(0, 100, 200);
+        --anchor-color-visited: rgb(147, 147, 147);
+        --danger-color: #ffdfdf;
+        --text-color: var(--text-color-dark);
+        --bg-color: white;
+    }
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent-color-light: #f9f3aa;
+        --accent-color-dark: #d5d458;
+        --anchor-color: rgb(127 213 255);
+        --anchor-color-visited: rgb(147, 147, 147);
+        --danger-color: #ffdfdf;
+        --text-color: var(--text-color-light);
+        --bg-color: #232323;
+    }
+}

@@ -19,7 +19,7 @@
     }
 
     #cancel {
-        background: var(--color-danger);
+        background: var(--danger-color);
     }
 
     button {
