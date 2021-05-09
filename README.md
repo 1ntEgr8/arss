@@ -14,6 +14,10 @@ I wanted a very minimal RSS reader that **wasn't** feature packed, but could be 
 
 ## Installation
 
+Requirements:
+- [go](https://golang.org/doc/install) >= 1.16
+- [node](https://nodejs.org/en/download/) >= 16.0.0
+
 ### macOS
 Install via Homebrew
 ```bash
