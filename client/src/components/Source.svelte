@@ -24,6 +24,7 @@
 
     export let id;
     export let name = "[no name]";
+    export let url = "[no url]";
     export let noedit = false;
     export let editSource;
     export let delSource;
@@ -60,6 +61,8 @@
                     editing = false;
                 }}
                 handleCancel={() => editing = false}
+                name={name}
+                url={url}
             />
         {/if}
         {#if deleting}
