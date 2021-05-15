@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONFIG_DIR="$HOME/.arss"
+CONFIG_DIR="~/.arss"
 DEFAULT_CLIENT_DIR="$CONFIG_DIR/clients/default"
 
 function info ()
