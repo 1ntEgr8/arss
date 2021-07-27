@@ -14,7 +14,7 @@
     }
 
     li:hover:not(.highlight) {
-        background: #f2f2f2;
+        background: var(--source-hover-color);
     }
 </style>
 

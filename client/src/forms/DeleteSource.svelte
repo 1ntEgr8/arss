@@ -22,6 +22,10 @@
         background: var(--danger-color);
     }
 
+    #cancel:hover {
+        background: var(--danger-color-hover);
+    }
+
     button {
         font-size: var(--font-size-s);
     }

@@ -23,7 +23,11 @@
     }
 
     #cancel {
-        background: var(--color-danger);
+        background: var(--danger-color);
+    }
+
+    #cancel:hover {
+        background: var(--danger-color-hover);
     }
 
     label {

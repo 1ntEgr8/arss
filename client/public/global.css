@@ -58,9 +58,14 @@ input:disabled {
 
 button {
 	color: #333;
-	background-color: #f4f4f4;
+	background: #f4f4f4;
 	outline: none;
     min-width: 50px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #d1d4d2;
 }
 
 button:focus {
@@ -121,7 +126,9 @@ button:disabled {
         --accent-color-dark: #d5d458;
         --anchor-color: rgb(0, 100, 200);
         --anchor-color-visited: rgb(147, 147, 147);
+        --source-hover-color: #f2f2f2; 
         --danger-color: #ffdfdf;
+        --danger-color-hover: #efa2a2;
         --text-color: var(--text-color-dark);
         --bg-color: white;
     }
@@ -134,7 +141,9 @@ button:disabled {
         --accent-color-dark: #d5d458;
         --anchor-color: rgb(127 213 255);
         --anchor-color-visited: rgb(147, 147, 147);
+        --source-hover-color: #505050;
         --danger-color: #ffdfdf;
+        --danger-color-hover: #efa2a2;
         --text-color: var(--text-color-light);
         --bg-color: #232323;
     }
